@@ -25,12 +25,12 @@ class Array:
         if isinstance(values[0], (int, float, bool)):
             data_type = type(values[0])
         else:
-            raise ValueError("All values are not numeric or boolean")
+            raise ValueError("Values must be numeric or boolean")
         # Check that all elements are of the same data type, if not raise TypeError
         if all(isinstance(element, data_type) for element in values):
             self.values = values
         else:
-            raise ValueError("All values are not numeric or boolean")
+            raise ValueError("All values are not of same data type")
 
         self.dimensions = len(shape)
 
@@ -48,8 +48,21 @@ class Array:
         Returns:
             str: A string representation of the array.
         """
+
         if self.dimensions == 1:
             return "[" + ', '.join(map(str, self.values)) + "]"
+
+        else:
+            nice_string = ""
+            columns = self.shape[1] # number of columns
+            rows = self.shape[0] # number of rows
+
+        for i in range(rows):
+            nice_string += "[" + ', '.join(map(str, self.values[(i * columns):(i + 1) * columns])) + "]"
+            if i < rows-1:
+                nice_string += "\n"
+
+        return nice_string
 
 
     def __add__(self, other):
@@ -173,7 +186,13 @@ class Array:
 
     def __getitem__(self, key):
         # # TODO: Add doc
-        return self.values[key]
+        if self.dimensions == 1:
+            return self.values[key]
+
+        # Array[rad][kolonne]
+        return self.values[key*self.shape[1]:]
+
+
 
 
 
@@ -232,3 +251,7 @@ class Array:
             float: The value of the smallest element in the array.
         """
         return min(self.values, key=float)
+
+# array1 = Array((3,3), 1, 2, 3, 4, 5, 6, 7, 8, 9)
+# print("Expect: 4")
+# print(array1[2][1])
