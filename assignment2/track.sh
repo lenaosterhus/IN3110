@@ -32,6 +32,43 @@ function findLastTask {
 }
 
 function printLog {
+  task=""
+  startTimeString=""
+  endTimeString=""
+
+  # Read lines in file
+  cat "$HOME/.local/share/$LOGFILE" | while read line || [[ -n $line ]];
+  do
+
+      key=$(echo $line | cut -d" " -f1)
+
+      case $key in
+          START)
+              startTimeString=${line:6}
+              ;;
+          LABEL)
+              task=$(echo $line | cut -d" " -f5)
+              ;;
+          END)
+              endTimeString=${line:4}
+              ;;
+          *)
+              # Blank line between tasks logged
+
+              # Epoc time
+              startTimeSeconds=$(date -d "$startTimeString" "+%s")
+              endTimeSeconds=$(date -d "$endTimeString" "+%s")
+
+              diff=$(date -u -d "0 $endTimeSeconds seconds - $startTimeSeconds seconds" +"%H:%M:%S")
+
+              echo "Task $task: $diff"
+              ;;
+      esac
+
+done
+}
+
+function printLogMac {
     task=""
     startTimeString=""
     endTimeString=""
