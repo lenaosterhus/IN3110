@@ -1,0 +1,5 @@
+Timing: numpy_color2sepia
+Dimensions: 400, 600, 3
+Average runtime running numpy_color2sepia after 3 runs: 0.20 s
+Average runtime for running numpy_color2sepia is 41 times faster than python_color2sepia
+Timing performed using: time.perf_counter()
