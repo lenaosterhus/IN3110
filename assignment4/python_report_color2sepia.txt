@@ -1,0 +1,4 @@
+Timing: python_color2sepia
+Dimensions: 400, 600, 3
+Average runtime running python_color2sepia after 3 runs: 8.06 s
+Timing performed using: time.perf_counter()
