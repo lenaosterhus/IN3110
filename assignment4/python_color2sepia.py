@@ -4,6 +4,13 @@ import time
 
 
 def python_color2sepia(image):
+    """Converts a image from color to sepia.
+
+    The sepia image is written to the same directory as the original with _sepia appended to the original name
+
+    Args:
+        image (string): The image path
+    """
     image_array = cv2.imread(image)
     filename, file_extension = os.path.splitext(image)
 
@@ -18,7 +25,7 @@ def python_color2sepia(image):
 
 
 def _conversion(column, channel):
-    
+    # Converts the values in the image-channel to sepia values
     if channel == 0:
         # Blue
         B_weight = 0.131
@@ -46,7 +53,7 @@ def _conversion(column, channel):
     column[channel] = weighted_sum if weighted_sum < 255 else 255
     return column
 
-
+# If run as a script: Time 3 runs and log to file
 if __name__ == "__main__":
     my_times = []
     for i in range(3):

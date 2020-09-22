@@ -5,6 +5,13 @@ from numba import jit
 
 
 def numba_color2grey(image):
+    """Converts a color image to greyscale.
+
+    The greyscale image is written to the same directory as the original with _greyscale appended to the original name
+
+    Args:
+        image (string): The image path
+    """
     image_array = cv2.imread(image)
     filename, file_extension = os.path.splitext(image)
 
@@ -13,6 +20,7 @@ def numba_color2grey(image):
 
 @jit
 def _conversion(image_array):
+    # Converts the values in the image-channels to greyscale values
     for row in image_array:
         for column in row:
             B = column[0] * 0.07
@@ -25,6 +33,7 @@ def _conversion(image_array):
 
     return image_array
 
+# If run as a script: Time 3 runs and log to file
 if __name__ == "__main__":
     my_times = []
     for i in range(3):

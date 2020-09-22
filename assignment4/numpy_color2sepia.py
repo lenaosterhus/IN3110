@@ -5,6 +5,13 @@ import time
 
 
 def numpy_color2sepia(image):
+    """Converts a image from color to sepia.
+
+    The sepia image is written to the same directory as the original with _sepia appended to the original name
+
+    Args:
+        image (string): The image path
+    """
     image_array = cv2.imread(image)
 
     filename, file_extension = os.path.splitext(image)
@@ -31,10 +38,12 @@ def numpy_color2sepia(image):
 
 @np.vectorize
 def _valid_value(num):
+    # Checks if the arg is a valid value, i.e. 255 or below
     if num > 255:
         return 255
     return num
 
+# If run as a script: Time 3 runs and log to file
 if __name__ == "__main__":
     my_times = []
     for i in range(3):
