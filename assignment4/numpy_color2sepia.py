@@ -31,7 +31,7 @@ def numpy_color2sepia(image):
         weighted_sum = B_weighted_array + G_weighted_array + R_weighted_array
         weighted_sum = _valid_value(weighted_sum)
 
-        image_array[:, :, i] = weighted_sum
+        image_array[:, :, channel] = weighted_sum
 
     sepia_image = image_array.astype("uint8")
     cv2.imwrite(filename + "_sepia" + file_extension, sepia_image)
