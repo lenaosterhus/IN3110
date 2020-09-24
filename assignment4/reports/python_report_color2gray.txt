@@ -1,4 +1,4 @@
 Timing: python_color2gray
 Dimensions: 400, 600, 3
-Average runtime running python_color2gray after 3 runs: 2.51 s
+Average runtime running python_color2gray after 3 runs: 2.32 s
 Timing performed using: time.perf_counter()
