@@ -1,0 +1,55 @@
+#!/usr/bin/python3.8
+
+from argparse import ArgumentParser
+import os
+
+from instapy import filters
+
+
+# https://stackoverflow.com/questions/15203829/python-argparse-file-extension-checking
+def image_file(fname):
+    ext = os.path.splitext(fname)[1][1:]
+    image_ext = {"bmp", "dib", "jpeg", "jpg", "jpe", "jp2", "png",
+                 "pbm", "pgm", "ppm", "sr", "ras", "tiff", "tif"}  # Accepted by cv2.imread
+    if ext.lower() not in image_ext:
+        parser.error(f"file is not image. Should end with one of {image_ext}")
+    return fname
+
+
+parser = ArgumentParser(
+    description="Add a filter to an image", prog="instapy.py")
+
+parser.add_argument("-f", "--file", type=image_file, required=True, dest="file", 
+                    help="The filename of file to apply filter")
+
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-se", "--sepia", action="store_true",
+                    help="Select sepia filter.")
+group.add_argument("-g", "--gray", action="store_true",
+                    help="Select gray filter.")
+
+parser.add_argument("-sc", "--scale", type=float, dest="scale", default=1.0, 
+                    help="Scale factor to resize image. Must be > 0 and <= 1.0")
+parser.add_argument("-i", "--implement", choices=["python", "numba", "numpy"], default="numpy",
+                    help="Choose the implementation. Default=numpy")
+parser.add_argument("-o", "--out", type=image_file, required=True,
+                    help="The output filename.")
+
+args = parser.parse_args()
+
+if __name__ == "__main__":
+    input_file = args.file
+    output_file = args.out
+    scale = args.scale
+    impl = args.implement
+
+    try:
+        if args.sepia:
+            filters.sepia_image(input_file, output_file, impl, scale)
+
+        if args.gray:
+            filters.grayscale_image(input_file, output_file, impl)
+    except TypeError as e:
+        print(e)  # Unsure why traceback is still being printed..
+    
+
