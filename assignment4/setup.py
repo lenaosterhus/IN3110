@@ -1,7 +1,9 @@
-from distutils.core import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name='instapy',
     version='1.0',
-    packages=['instapy',]
+    author='Lena Osterhus',
+    packages=setuptools.find_packages(),
+    scripts=['bin/instapy']
 )
