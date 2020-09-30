@@ -3,9 +3,15 @@ from cv2 import cv2
 import numpy as np
 import os
 
+"""A module for converting an image to sepia using numba.
+
+The module contains two functions: 
+- sepia_filter for converting, and saving, an image to sepia
+- numba_color2sepia for converting a ndarray representing an image to sepia
+"""
 
 def numba_color2sepia(image_array):
-    """Converts a color image array to sepia.
+    """Converts a color image array to sepia using numba.
 
     Args:
         image (ndarray): 3D array of unsigned integers representing the color image.
@@ -52,7 +58,7 @@ def _conversion(image_array, sepia_array):
 
 
 def sepia_filter(input_filename):
-    """Converts a color image to sepia using Numba.
+    """Converts, and saves, a color image to sepia using Numba.
 
     The sepia image is written to the same directory as the original with _sepia appended to the original name.
 

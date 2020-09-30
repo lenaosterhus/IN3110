@@ -6,8 +6,18 @@ import os
 from instapy import filters
 
 
-# https://stackoverflow.com/questions/15203829/python-argparse-file-extension-checking
 def image_file(fname):
+    """Checks if the argument is an image file accepted by OpenCV.
+
+    If argument is not an image file, the parser recieves an error.
+    Inspired by https://stackoverflow.com/questions/15203829/python-argparse-file-extension-checking
+
+    Args:
+        fname (string): The file name/path
+
+    Returns:
+        string: The file name/path
+    """
     ext = os.path.splitext(fname)[1][1:]
     image_ext = {"bmp", "dib", "jpeg", "jpg", "jpe", "jp2", "png",
                  "pbm", "pgm", "ppm", "sr", "ras", "tiff", "tif"}  # Accepted by cv2.imread
@@ -17,7 +27,7 @@ def image_file(fname):
 
 
 parser = ArgumentParser(
-    description="Add a filter to an image", prog="instapy.py")
+    description="Add a filter to an image", prog="instapy")
 
 parser.add_argument("-f", "--file", type=image_file, required=True, dest="file", 
                     help="The filename of file to apply filter")
@@ -37,6 +47,7 @@ parser.add_argument("-o", "--out", type=image_file, required=True,
 
 args = parser.parse_args()
 
+
 if __name__ == "__main__":
     input_file = args.file
     output_file = args.out
@@ -49,7 +60,7 @@ if __name__ == "__main__":
 
         if args.gray:
             filters.grayscale_image(input_file, output_file, impl)
-    except TypeError as e:
-        print(e)  # Unsure why traceback is still being printed..
+    except (TypeError, FileNotFoundError) as e:
+        print(e)
     
 

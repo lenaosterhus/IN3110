@@ -2,8 +2,15 @@ import numpy as np
 from cv2 import cv2
 import os
 
+"""A module for converting an image to sepia using numpy.
+
+The module contains two functions: 
+- sepia_filter for converting, and saving, an image to sepia
+- numpy_color2sepia for converting a ndarray representing an image to sepia
+"""
+
 def numpy_color2sepia(image_array):
-    """Converts a color image array to sepia.
+    """Converts a color image array to sepia using numpy.
 
     Args:
         image (ndarray): 3D array of unsigned integers representing the color image.
@@ -38,7 +45,7 @@ def _valid_value(num):
 
 
 def sepia_filter(input_filename):
-    """Converts a color image to sepia using Numpy.
+    """Converts, and saves, a color image to sepia using Numpy.
 
     The sepia image is written to the same directory as the original with _sepia appended to the original name.
 

@@ -2,11 +2,19 @@ from cv2 import cv2
 import numpy as np
 import os
 
+"""A module for converting an image to grayscale using only python.
+
+The module contains two functions: 
+- grayscale_filter for converting, and saving, an image to grayscale
+- python_color2gray for converting a ndarray representing an image to grayscale
+"""
+
 def python_color2gray(image_array):
     """Converts a color image array to grayscale.
 
     Args:
         image (ndarray): 3D array of unsigned integers representing the color image.
+
     Returns:
         ndarray: 2D array of unsigned integers representing the greyscale image.
     """
@@ -23,16 +31,17 @@ def python_color2gray(image_array):
 
             grayscale_image[row_index, column_index] = weighted_sum
 
-    grayscale_image = grayscale_image.astype("uint8")
-    return grayscale_image
+    return grayscale_image.astype("uint8")
+
 
 def grayscale_filter(input_filename):
-    """Converts a color image to grayscale.
+    """Converts, and saves, a color image to grayscale.
 
     The grayscale image is written to the same directory as the original with _grayscale appended to the original name
     
     Args:
         input_filename (string): The image path.
+
     Returns:
         ndarray: 2D array of unsigned integers representing the greyscale image.
     """

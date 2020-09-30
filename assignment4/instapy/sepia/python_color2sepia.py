@@ -2,6 +2,13 @@ from cv2 import cv2
 import numpy as np
 import os
 
+"""A module for converting an image to sepia using only python.
+
+The module contains two functions: 
+- sepia_filter for converting, and saving, an image to sepia
+- python_color2sepia for converting a ndarray representing an image to sepia
+"""
+
 def python_color2sepia(image_array):
     """Converts a color image array to sepia.
 
@@ -41,11 +48,12 @@ def python_color2sepia(image_array):
                 weighted_sum = B + G + R
 
                 sepia_array[row_index, column_index, channel] = weighted_sum if weighted_sum < 255 else 255
+    
     return sepia_array.astype("uint8")
 
 
 def sepia_filter(input_filename):
-    """Converts a color image to sepia.
+    """Converts, and saves, a color image to sepia.
 
     The sepia image is written to the same directory as the original with _sepia appended to the original name.
 
