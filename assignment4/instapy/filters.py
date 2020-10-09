@@ -1,5 +1,4 @@
 from cv2 import cv2
-import numpy as np
 import os
 
 from instapy.grayscale.numpy_color2gray import numpy_color2gray
@@ -38,7 +37,7 @@ def grayscale_image(input_filename, output_filename=None, implementation="numpy"
     image_array = cv2.imread(input_filename)
 
     # Checks for scaling
-    if scale > 1 or scale <= 0:  
+    if scale > 1 or scale <= 0:
         raise ValueError(
             f"Scaling with {scale} is not possible. Must be > 0 and <= 1.0")
     elif scale < 1 and scale > 0:
@@ -58,10 +57,10 @@ def grayscale_image(input_filename, output_filename=None, implementation="numpy"
     # Checks whether to save image or not
     if output_filename != None:
         cv2.imwrite(output_filename, grayscale_image)
-    
+
     return grayscale_image
-    
-    
+
+
 def sepia_image(input_filename, output_filename=None, implementation="numpy", scale=1.0):
     """Converts a color image to sepia.
 
