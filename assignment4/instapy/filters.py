@@ -55,7 +55,7 @@ def grayscale_image(input_filename, output_filename=None, implementation="numpy"
             f"Implementation '{implementation}' is not valid. Must be 'python', 'numba' or 'numpy'")
 
     # Checks whether to save image or not
-    if output_filename != None:
+    if output_filename is not None:
         cv2.imwrite(output_filename, grayscale_image)
 
     return grayscale_image
@@ -102,7 +102,7 @@ def sepia_image(input_filename, output_filename=None, implementation="numpy", sc
             f"Implementation '{implementation}' is not valid. Must be 'python', 'numba' or 'numpy'")
 
     # Checks whether to save image or not
-    if output_filename != None:
+    if output_filename is not None:
         cv2.imwrite(output_filename, sepia_image)
 
     return sepia_image
