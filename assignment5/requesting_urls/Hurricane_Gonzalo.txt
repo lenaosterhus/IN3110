@@ -5,7 +5,7 @@ URL: https://en.wikipedia.org/w/index.php?title=Hurricane_Gonzalo&oldid=98305616
 <head>
 <meta charset="UTF-8"/>
 <title>Hurricane Gonzalo - Wikipedia</title>
-<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"fbc25793-001c-4489-9f42-3bbe4b1bcdcf","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Hurricane_Gonzalo","wgTitle":"Hurricane Gonzalo","wgCurRevisionId":983180441,"wgRevisionId":983056166,"wgArticleId":44103799,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["CS1 French-language sources (fr)","CS1 Dutch-language sources (nl)","CS1 German-language sources (de)","CS1 Greek-language sources (el)","Articles with short description","Short description is different from Wikidata","Wikipedia pages semi-protected from banned users",
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"c0a0f120-8a01-4b35-b4eb-f967338bec95","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"Hurricane_Gonzalo","wgTitle":"Hurricane Gonzalo","wgCurRevisionId":983180441,"wgRevisionId":983056166,"wgArticleId":44103799,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["CS1 French-language sources (fr)","CS1 Dutch-language sources (nl)","CS1 German-language sources (de)","CS1 Greek-language sources (el)","Articles with short description","Short description is different from Wikidata","Wikipedia pages semi-protected from banned users",
 "Use mdy dates from May 2019","Featured articles","2014 Atlantic hurricane season","Category 4 Atlantic hurricanes","European windstorms","Natural disasters in the Leeward Islands","Hurricanes in the Leeward Islands","Hurricanes in Anguilla","Hurricanes in Antigua and Barbuda","Hurricanes in Canada","Hurricanes in Guadeloupe","Hurricanes in Saint Barthélemy","Hurricanes in Saint Kitts and Nevis","Hurricanes in Saint Martin","Hurricanes in the British Virgin Islands","Hurricanes in Bermuda","Hurricanes in the United States Virgin Islands","Hurricanes in Europe","Tropical cyclones in 2014"],"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Hurricane_Gonzalo","wgRelevantArticleId":44103799,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":["autoconfirmed"],"wgRestrictionMove":[],"wgMediaViewerOnClick":!0,"wgMediaViewerEnabledByDefault":!0,"wgPopupsReferencePreviews":!1,"wgPopupsConflictsWithNavPopupGadget":
 !1,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":!0,"nearby":!0,"watchlist":!0,"tagline":!1},"wgWMESchemaEditAttemptStepOversample":!1,"wgULSCurrentAutonym":"English","wgNoticeProject":"wikipedia","wgCentralAuthMobileDomain":!1,"wgEditSubmitButtonLabelPublish":!0,"wgULSPosition":"interlanguage","wgWikibaseItemId":"Q18265174"};RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","noscript":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.cite.styles":"ready","skins.vector.styles.legacy":"ready","jquery.makeCollapsible.styles":"ready","mediawiki.toc.styles":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","ext.wikimediaBadges":"ready","wikibase.client.init":"ready"};RLPAGEMODULES=["ext.cite.ux-enhancements","site","mediawiki.page.ready",
 "jquery.makeCollapsible","mediawiki.toc","skins.vector.legacy.js","ext.gadget.ReferenceTooltips","ext.gadget.charinsert","ext.gadget.extra-toolbar-buttons","ext.gadget.refToolbar","ext.gadget.switcher","ext.centralauth.centralautologin","mmv.head","mmv.bootstrap.autostart","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.visualEditor.targetLoader","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.compactlinks","ext.uls.interface","ext.cx.eventlogging.campaigns","ext.quicksurveys.init","ext.centralNotice.geoIP","ext.centralNotice.startUp"];</script>
@@ -396,13 +396,13 @@ URL: https://en.wikipedia.org/w/index.php?title=Hurricane_Gonzalo&oldid=98305616
 </p>
 <!-- 
 NewPP limit report
-Parsed by mw2273
-Cached time: 20201013075621
+Parsed by mw2336
+Cached time: 20201013120708
 Cache expiry: 2592000
 Dynamic content: false
 Complications: [vary‐revision‐sha1]
-CPU time usage: 1.420 seconds
-Real time usage: 1.597 seconds
+CPU time usage: 1.248 seconds
+Real time usage: 1.475 seconds
 Preprocessor visited node count: 6855/1000000
 Post‐expand include size: 222446/2097152 bytes
 Template argument size: 5205/2097152 bytes
@@ -410,22 +410,22 @@ Highest expansion depth: 15/40
 Expensive parser function count: 6/500
 Unstrip recursion depth: 1/20
 Unstrip post‐expand size: 377349/5000000 bytes
-Lua time usage: 0.824/10.000 seconds
+Lua time usage: 0.680/10.000 seconds
 Lua memory usage: 9.58 MB/50 MB
 Number of Wikibase entities loaded: 0/400
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00% 1422.073      1 -total
- 61.77%  878.405      1 Template:Reflist
- 32.80%  466.458     81 Template:Cite_news
- 20.46%  290.993     34 Template:Cite_web
-  4.89%   69.507     25 Template:Convert
-  4.63%   65.790      1 Template:Infobox_hurricane
-  4.31%   61.263      1 Template:Short_description
-  3.84%   54.661      1 Template:Infobox
-  3.60%   51.214      1 Template:2014_Atlantic_hurricane_season_buttons
-  3.55%   50.526      1 Template:Pp-sock
+100.00% 1283.938      1 -total
+ 54.00%  693.299      1 Template:Reflist
+ 27.77%  356.558     81 Template:Cite_news
+ 19.63%  252.008     34 Template:Cite_web
+  6.45%   82.802      1 Template:Short_description
+  5.54%   71.183     25 Template:Convert
+  4.63%   59.449      1 Template:Pp-sock
+  4.02%   51.558      1 Template:Infobox_hurricane
+  3.94%   50.549      6 Template:Main_other
+  3.90%   50.049      1 Template:2014_Atlantic_hurricane_season_buttons
 -->
 </div><noscript><img src="//en.wikipedia.org/wiki/Special:CentralAutoLogin/start?type=1x1" alt="" title="" width="1" height="1" style="border: none; position: absolute;" /></noscript>
 <div class="printfooter">Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=Hurricane_Gonzalo&amp;oldid=983056166">https://en.wikipedia.org/w/index.php?title=Hurricane_Gonzalo&amp;oldid=983056166</a>"</div></div>
@@ -642,7 +642,7 @@ Transclusion expansion time report (%,ms,calls,template)
 </footer>
 
 
-<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"1.420","walltime":"1.597","ppvisitednodes":{"value":6855,"limit":1000000},"postexpandincludesize":{"value":222446,"limit":2097152},"templateargumentsize":{"value":5205,"limit":2097152},"expansiondepth":{"value":15,"limit":40},"expensivefunctioncount":{"value":6,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":377349,"limit":5000000},"entityaccesscount":{"value":0,"limit":400},"timingprofile":["100.00% 1422.073      1 -total"," 61.77%  878.405      1 Template:Reflist"," 32.80%  466.458     81 Template:Cite_news"," 20.46%  290.993     34 Template:Cite_web","  4.89%   69.507     25 Template:Convert","  4.63%   65.790      1 Template:Infobox_hurricane","  4.31%   61.263      1 Template:Short_description","  3.84%   54.661      1 Template:Infobox","  3.60%   51.214      1 Template:2014_Atlantic_hurricane_season_buttons","  3.55%   50.526      1 Template:Pp-sock"]},"scribunto":{"limitreport-timeusage":{"value":"0.824","limit":"10.000"},"limitreport-memusage":{"value":10045154,"limit":52428800}},"cachereport":{"origin":"mw2273","timestamp":"20201013075621","ttl":2592000,"transientcontent":false}}});});</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"1.248","walltime":"1.475","ppvisitednodes":{"value":6855,"limit":1000000},"postexpandincludesize":{"value":222446,"limit":2097152},"templateargumentsize":{"value":5205,"limit":2097152},"expansiondepth":{"value":15,"limit":40},"expensivefunctioncount":{"value":6,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":377349,"limit":5000000},"entityaccesscount":{"value":0,"limit":400},"timingprofile":["100.00% 1283.938      1 -total"," 54.00%  693.299      1 Template:Reflist"," 27.77%  356.558     81 Template:Cite_news"," 19.63%  252.008     34 Template:Cite_web","  6.45%   82.802      1 Template:Short_description","  5.54%   71.183     25 Template:Convert","  4.63%   59.449      1 Template:Pp-sock","  4.02%   51.558      1 Template:Infobox_hurricane","  3.94%   50.549      6 Template:Main_other","  3.90%   50.049      1 Template:2014_Atlantic_hurricane_season_buttons"]},"scribunto":{"limitreport-timeusage":{"value":"0.680","limit":"10.000"},"limitreport-memusage":{"value":10045194,"limit":52428800}},"cachereport":{"origin":"mw2336","timestamp":"20201013120708","ttl":2592000,"transientcontent":false}}});});</script>
 <script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"Hurricane Gonzalo","url":"https:\/\/en.wikipedia.org\/wiki\/Hurricane_Gonzalo","sameAs":"http:\/\/www.wikidata.org\/entity\/Q18265174","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q18265174","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2014-10-13T21:52:30Z","dateModified":"2020-10-12T18:35:41Z","image":"https:\/\/upload.wikimedia.org\/wikipedia\/commons\/a\/a5\/Gonzalo_2014-10-16_1215Z.png","headline":"Category 4 hurricane in 2014"}</script>
-<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":1791,"wgHostname":"mw2273"});});</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":1647,"wgHostname":"mw2336"});});</script>
 </body></html>
