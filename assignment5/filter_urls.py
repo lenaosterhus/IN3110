@@ -1,3 +1,5 @@
+from requesting_urls import get_html
+
 import re
 
 def find_urls(html, base=None):
@@ -48,3 +50,17 @@ def find_articles(html, base=None, language="", output=None):
 
     return urls
 
+
+if __name__ == "__main__":
+    
+    urls = ["https://en.wikipedia.org/wiki/Nobel_Prize",
+            "https://en.wikipedia.org/wiki/Bundesliga",
+            "https://en.wikipedia.org/wiki/2019%E2%80%9320_FIS_Alpine_Ski_World_Cup"]
+
+    outputs = ["Nobel_Prize", "Bundesliga", "World Cup"]
+
+    for url, output in zip(urls, outputs):
+        html = get_html(url).text
+
+        articles = find_articles(
+            html, base="https://en.wikipedia.org", output=output)
