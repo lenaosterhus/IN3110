@@ -8,8 +8,8 @@ def extract_table(url, title):
     """Extracts the first table after title in HTML.
 
     Args:
-        url (string): The URL to request and get table from.
-        title (string): The title of the table.
+        url (str): The URL to request and get table from.
+        title (str): The title of the table.
 
     Returns:
         bs4.element.Tag: The first table after title. If not found, None is returned.
@@ -21,7 +21,6 @@ def extract_table(url, title):
     soup_title = soup.find(id=title)
 
     if soup_title is None:
-        # print(f"Could not find title {title} in URL {url}")
         return None
     return soup_title.find_all_next("table")[0]
 
@@ -29,10 +28,10 @@ def extract_url(table):
     """Extracts the url of the teams in the Conference Semifinals from Bracket table.
 
     Args:
-        table (bs4.element.Tag): The 'Bracket' table contatining the teams 
+        table (bs4.element.Tag): The 'Bracket' table contatining the teams.
 
     Returns:
-        dict of str: str: A dictionary mapping the team name to the team URL
+        dict of str: str: A dictionary mapping the team name to the team URL.
     """
     rows = table.findAll("tr")
 
@@ -57,16 +56,16 @@ def extract_player_url(table):
     """Extracts the players url from the team roster.
 
     Args:
-        table (bs4.element.Tag): The table containing all infomration about all the players on the team roster
+        table (bs4.element.Tag): The table containing all infomration about all the players on the team roster.
 
     Returns:
-        dict of str: str: A dictionary mapping the players name to the players URL
+        dict of str: str: A dictionary mapping the players name to the players URL.
     """
     players = {}
 
     a_tags = table.findAll("a")
 
-    # There are 3 a-tags per row. Player names & URL are the 2. a-tag, then skip by 3 to get next
+    # There are 3 a-tags per row. Player names & URL are the 2. a-tag. Skip by 3 to get next
     i = 1
     while i < len(a_tags):
         a_tag = a_tags[i]
@@ -79,20 +78,20 @@ def extract_player_url(table):
 
     return players
 
-def extract_points(table):
+def extract_points(table, season):
     """Extracts the points from the players Regular Season table.
 
     Args:
         table (bs4.element.Tag): A BeautifulSoup-tag representing the players Regular Season table.
+        season (str): The season to extract points from.
 
     Returns:
-        dict of str: float: A dictionary with string keys representing the score type.
-            and float values representing the score. If the player does not have any
-            scores, None is returned.
+        list of floats: A list of floats representing the score [ppg, bpg, rpg]. 
+            If the player does not have any scores, None is returned.
     """
     rows = table.find_all("tr")
 
-    # Find which column the points are located, in case something changes with the table
+    # Find which column the points are located, in case something changes with the table.
     headers = [th.get_text(strip=True)
                 for th in rows[0].find_all("th")]
     ppg_index = headers.index("PPG")  # Points per game
@@ -102,7 +101,7 @@ def extract_points(table):
     for row in rows[::-1]:
         cells = row.find_all("td")
 
-        if len(cells) > 0 and cells[0].get_text(strip=True) == "2019–20":
+        if len(cells) > 0 and cells[0].get_text(strip=True) == season:
 
             try:
                 ppg = float(cells[ppg_index].get_text(strip=True))
@@ -117,18 +116,19 @@ def extract_points(table):
             except ValueError:
                 rpg = 0.0
 
-            return dict([("PPG", ppg), ("BPG", bpg), ("RPG", rpg)])
+            return [ppg, bpg, rpg]
     return None
 
-def extract_top_3_players(players):
+def extract_top_3_players(players, season):
     """Extracts the top 3 players on the team, based on PPG.
 
     Args:
-        players (dict of str: str): A dictionary of players names mapped to their URL
+        players (dict of str: str): A dictionary of players names mapped to their URL.
+        season (str): The season to extract points from.
 
     Returns:
-        dict of str: dict: of str: float: A dictionary with players names as keys, and a 
-            dictionary with the score type as keys and float values representing the score as values.
+        dict of str: list of floats: A dictionary with players names as keys, and a 
+            list with the scores [ppg, bpg, rpg] as values.
     """
     top_players = {}
 
@@ -139,13 +139,14 @@ def extract_top_3_players(players):
             # No scores - not a top player...
             continue
 
-        points = extract_points(reg_season_table)
+        points = extract_points(reg_season_table, season)
 
         if points is not None:
             top_players[player] = points
 
     top_3_players = dict(sorted(top_players.items(),
-                                key=lambda k_v: k_v[1]["PPG"], reverse=True)[:3])  # Sorted by PPG
+                                key=lambda k_v: k_v[1][0], reverse=True)[:3])  # Sorted by PPG
+
     return top_3_players
 
 def create_plot(top_players_in_teams, type_points, title):
@@ -162,11 +163,15 @@ def create_plot(top_players_in_teams, type_points, title):
     """
     _, ax = plt.subplots()
 
+    index = (type_points == "PPG" and 0) or (
+             type_points == "BPG" and 1) or (
+             type_points == "RPG" and 2)
+
     for team in top_players_in_teams:
         players = top_players_in_teams[team]
         names = list(players.keys())
 
-        values = [value[type_points] for value in list(players.values())]
+        values = [value[index] for value in list(players.values())]
 
         team_bars = ax.bar(names, values, label=team, zorder=3)
         team_bars.set_label(team)
@@ -181,7 +186,7 @@ def create_plot(top_players_in_teams, type_points, title):
 
 
 if __name__ == "__main__":
-    
+
     url = "https://en.wikipedia.org/wiki/2020_NBA_playoffs"
 
     table = extract_table(url, "Bracket")
@@ -194,8 +199,7 @@ if __name__ == "__main__":
         players_table = roster_table.find("table")
 
         players = extract_player_url(players_table)
-        
-        top_players_in_teams[team] = extract_top_3_players(players)
+        top_players_in_teams[team] = extract_top_3_players(players, "2019–20")
 
     # Plotting
     create_plot(top_players_in_teams, "PPG",
