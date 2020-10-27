@@ -1,8 +1,22 @@
 import requests as req
 
 def get_html(url, params=None, output=None):
+    """Gets the html of the url, and optionally writes it to file.
+
+    If output is provided the URL and HTML is written to file.
+
+    Args:
+        url (str): The URL to request.
+        params (dict of str: str, optional): Parameters to be passed to the get function. Defaults to None.
+        output (str, optional): The filename to write URL and html to. Defaults to None.
+
+    Returns:
+        requests.Response: The response object containing the server's response to the HTTP request.
+    """
 
     response = req.get(url, params=params)
+
+    assert response.status_code == 200
 
     if output is not None:
         with open(f"./requesting_urls/{output}.txt", "w") as file:
