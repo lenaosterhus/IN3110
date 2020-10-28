@@ -1,28 +1,7 @@
 from requesting_urls import get_html
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
-import numpy as np
 
-
-def extract_table(url, title):
-    """Extracts the first table after title in HTML.
-
-    Args:
-        url (str): The URL to request and get table from.
-        title (str): The title of the table.
-
-    Returns:
-        bs4.element.Tag: The first table after title. If not found, None is returned.
-    """
-
-    html = get_html(url).text
-    soup = BeautifulSoup(html, "lxml")
-
-    soup_title = soup.find(id=title)
-
-    if soup_title is None:
-        return None
-    return soup_title.find_all_next("table")[0]
 
 def extract_url(table):
     """Extracts the url of the teams in the Conference Semifinals from Bracket table.
@@ -52,7 +31,27 @@ def extract_url(table):
 
     return teams_conference_semi
 
-def extract_player_url(table):
+def _extract_table(url, title):
+    """Extracts the first table after title in HTML.
+
+    Args:
+        url (str): The URL to request and get table from.
+        title (str): The title of the table.
+
+    Returns:
+        bs4.element.Tag: The first table after title. If not found, None is returned.
+    """
+
+    html = get_html(url).text
+    soup = BeautifulSoup(html, "lxml")
+
+    soup_title = soup.find(id=title)
+
+    if soup_title is None:
+        return None
+    return soup_title.find_all_next("table")[0]
+
+def _extract_player_url(table):
     """Extracts the players url from the team roster.
 
     Args:
@@ -78,7 +77,7 @@ def extract_player_url(table):
 
     return players
 
-def extract_points(table, season):
+def _extract_points(table, season):
     """Extracts the points from the players Regular Season table.
 
     Args:
@@ -119,7 +118,7 @@ def extract_points(table, season):
             return [ppg, bpg, rpg]
     return None
 
-def extract_top_3_players(players, season):
+def _extract_top_3_players(players, season):
     """Extracts the top 3 players on the team, based on PPG.
 
     Args:
@@ -133,13 +132,13 @@ def extract_top_3_players(players, season):
     top_players = {}
 
     for player in players:
-        reg_season_table = extract_table(players[player], "Regular_season")
+        reg_season_table = _extract_table(players[player], "Regular_season")
 
         if reg_season_table is None:
             # No scores - not a top player...
             continue
 
-        points = extract_points(reg_season_table, season)
+        points = _extract_points(reg_season_table, season)
 
         if points is not None:
             top_players[player] = points
@@ -149,7 +148,7 @@ def extract_top_3_players(players, season):
 
     return top_3_players
 
-def create_plot(top_players_in_teams, type_points, title):
+def _create_plot(top_players_in_teams, type_points, title):
     """Creates a plot of top players in teams for given type of points.
     
     Plot is saved to NBA_player_statistics directory as png.
@@ -189,24 +188,24 @@ if __name__ == "__main__":
 
     url = "https://en.wikipedia.org/wiki/2020_NBA_playoffs"
 
-    table = extract_table(url, "Bracket")
+    table = _extract_table(url, "Bracket")
     teams = extract_url(table)
 
     top_players_in_teams = {}
 
     for team in teams:
-        roster_table = extract_table(teams[team], "Roster") # Contains multiple tables
+        roster_table = _extract_table(teams[team], "Roster") # Contains multiple tables
         players_table = roster_table.find("table")
 
-        players = extract_player_url(players_table)
-        top_players_in_teams[team] = extract_top_3_players(players, "2019–20")
+        players = _extract_player_url(players_table)
+        top_players_in_teams[team] = _extract_top_3_players(players, "2019–20")
 
     # Plotting
-    create_plot(top_players_in_teams, "PPG",
+    _create_plot(top_players_in_teams, "PPG",
                 "Points per game for top players in NBA 2019-20")
-    create_plot(top_players_in_teams, "BPG",
+    _create_plot(top_players_in_teams, "BPG",
                 "Blocks per game for top players in NBA 2019-20")
-    create_plot(top_players_in_teams, "RPG",
+    _create_plot(top_players_in_teams, "RPG",
                 "Rebounds per game for top players in NBA 2019-20")
 
     print("Finished plotting")
