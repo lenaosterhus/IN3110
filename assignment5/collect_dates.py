@@ -73,23 +73,31 @@ def find_dates(html, output=None):
 
     dates = []
 
-    # DMY
-    pattern_DMY = r"\b((?:0?[1-9])|(?:[12][0-9])|(?:3[01]))? ?((?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))[a-z]{0,6}) ([012][0-9]{3})\b"
+    # Regex patterns
+    # Date can be single digit
+    date = r"((?:0?[1-9])|(?:[12][0-9])|(?:3[01]))"
+    # Month can be abbreviated
+    month = r"((?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))[a-z]{0,6})"
+    # Year must be between 0000 - 2999
+    year = r"([012][0-9]{3})"
+
+    # DMY (date optional)
+    pattern_DMY = fr"\b{date}? ?{month} {year}\b"
     dates += [f"{date[2]}/{_get_num_month(date[1])}/{_get_correct_day(date[0])}"
               if len(date[0]) != 0 else f"{date[2]}/{_get_num_month(date[1])}"
               for date in re.findall(pattern_DMY, html, flags=re.M)]
-    # MDY
-    pattern_MDY = r"\b((?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))[a-z]{0,6}) ?((?:0[1-9])|(?:[12][0-9])|(?:3[01]))?, ([012][0-9]{3})\b"
-    dates += [f"{date[2]}/{_get_num_month(date[0])}/{date[1]}"
+    # MDY (date optional)
+    pattern_MDY = fr"\b{month} ?{date}?, {year}\b"
+    dates += [f"{date[2]}/{_get_num_month(date[0])}/{_get_correct_day(date[1])}"
               if len(date[1]) != 0 else f"{date[2]}/{_get_num_month(date[0])}" 
               for date in re.findall(pattern_MDY, html, flags=re.M)]
     # YMD
-    pattern_YMD = r"\b([012][0-9]{3}) ((?:(?:Jan)|(?:Feb)|(?:Mar)|(?:Apr)|(?:May)|(?:Jun)|(?:Jul)|(?:Aug)|(?:Sep)|(?:Oct)|(?:Nov)|(?:Dec))[a-z]{0,6}) ((?:0?[1-9])|(?:[12][0-9])|(?:3[01]))\b"
+    pattern_YMD = fr"\b{year} {month} {date}\b"
     dates += [f"{date[0]}/{_get_num_month(date[1])}/{_get_correct_day(date[2])}"
               if len(date[2]) != 0 else f"{date[0]}/{_get_num_month(date[1])}"
               for date in re.findall(pattern_YMD, html, flags=re.M)]
-    # ISO
-    pattern_ISO = r"\b([012][0-9]{3})-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12][0-9])|(?:3[01]))\b"
+    # ISO (date can't be single digit)
+    pattern_ISO = fr"\b{year}-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12][0-9])|(?:3[01]))\b"
     dates += [f"{date[0]}/{date[1]}/{date[2]}"
               for date in re.findall(pattern_ISO, html, flags=re.M)]
 

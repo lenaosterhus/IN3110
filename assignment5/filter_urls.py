@@ -4,6 +4,8 @@ import re
 def find_urls(html, base=None):
     """Finds URLs in HTML string.
 
+    Does not check if URLs are valid!
+
     Args:
         html (str): The HTML code to search for URLs.
         base (str, optional): The base URL for relative URLs. Defaults to None.
@@ -12,7 +14,9 @@ def find_urls(html, base=None):
         list of str: The list of all URLs found in the HTML string.
     """
 
-    regex_url = r"<a(?:[^href]*)href=\"([a-zA-Z0-9\/-_@:%.\+()]+)(?:#*[a-zA-Z0-9\/-_@:%.\+()]*)\""
+    # Make sure a-tags with other attributes are found: "<a[^>]+href="
+    # Ignore fragment identifiers (#): (?:#*[a-zA-Z0-9\/-_@:%.\+()]*)
+    regex_url = r"<a[^>]*href=\"([a-zA-Z0-9\/-_@:%.\+()]+)(?:#*[a-zA-Z0-9\/-_@:%.\+()]*)\""
 
     # Absolute and relative URLs
     urls = re.findall(regex_url, html, flags=re.M)

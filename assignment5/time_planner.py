@@ -36,6 +36,9 @@ def extract_events(soup_table):
             cell = re.sub(r"\[[a-zA-Z0-9 ]+\] ?", "", cell)
             
             # Check if cell is date
+            # day: (?:(?:0?[1-9])|(?:[12][0-9])|(?:3[01]))
+            # month: [A-Z][a-z]{2,8}
+            # year: [012][0-9]{3}
             date_pattern = r"(?:(?:0?[1-9])|(?:[12][0-9])|(?:3[01])) [A-Z][a-z]{2,8} [012][0-9]{3}"
 
             if re.match(date_pattern, cell):
@@ -65,7 +68,7 @@ def extract_events(soup_table):
     return [event for event in all_data if len(event) > 0]
     
 
-def get_tables(url):
+def _get_tables(url):
     """Gets the 'wikitable plainrowheaders'-tables from URL.
 
     Args:
@@ -80,7 +83,7 @@ def get_tables(url):
     return soup.find_all("table", class_="wikitable plainrowheaders")
 
 
-def create_betting_slip(events):
+def _create_betting_slip(events):
     """Creates a betting slip with all events.
 
     Creates a betting slip as a Markdown-file with information about 
@@ -102,11 +105,11 @@ def create_betting_slip(events):
 
 if __name__ == "__main__":
     all_events = []
-    for table in get_tables("https://en.wikipedia.org/wiki/2019%E2%80%9320_FIS_Alpine_Ski_World_Cup"):
+    for table in _get_tables("https://en.wikipedia.org/wiki/2019%E2%80%9320_FIS_Alpine_Ski_World_Cup"):
         all_events += extract_events(table)
     
     # Sort by date
     sorted_list = sorted(all_events, key=lambda i: i["Date"])
 
-    create_betting_slip(sorted_list)
+    _create_betting_slip(sorted_list)
 
