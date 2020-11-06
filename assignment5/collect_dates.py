@@ -2,39 +2,26 @@ from requesting_urls import get_html
 import re
 
 
-def _get_num_month(month):
+def _get_num_month(text):
     """Returns the numerical value of month as string.
 
     Args:
-        month (str): The month as a string. E.g. "Jan" or "January".
+        text (str): The month as a string. E.g. "Jan" or "January".
 
     Returns:
         str: The numerical value of the month as a string.
     """
-    if "Jan" in month:
-        return "01"
-    if "Feb" in month:
-        return "02"
-    if "Mar" in month:
-        return "03"
-    if "Apr" in month:
-        return "04"
-    if "May" in month:
-        return "05"
-    if "Jun" in month:
-        return "06"
-    if "Jul" in month:
-        return "07"
-    if "Aug" in month:
-        return "08"
-    if "Sep" in month:
-        return "09"
-    if "Oct" in month:
-        return "10"
-    if "Nov" in month:
-        return "11"
-    if "Dec" in month:
-        return "12"
+
+    #Shortened this method down to a list
+    months = ["Jan", "Feb", "Mar",
+              "Apr", "May", "Jun", 
+              "Jul", "Aug", "Sep",
+              "Oct", "Nov", "Dec"]
+
+    for i, month in enumerate(months):
+        if month in text:
+            if i+1 < 10: return "0" + str(i+1)
+            return str(i+1)
     return ""
 
 def _get_correct_day(day):
@@ -86,16 +73,19 @@ def find_dates(html, output=None):
     dates += [f"{date[2]}/{_get_num_month(date[1])}/{_get_correct_day(date[0])}"
               if len(date[0]) != 0 else f"{date[2]}/{_get_num_month(date[1])}"
               for date in re.findall(pattern_DMY, html, flags=re.M)]
+    
     # MDY (date optional)
     pattern_MDY = fr"\b{month} ?{date}?, {year}\b"
     dates += [f"{date[2]}/{_get_num_month(date[0])}/{_get_correct_day(date[1])}"
               if len(date[1]) != 0 else f"{date[2]}/{_get_num_month(date[0])}" 
               for date in re.findall(pattern_MDY, html, flags=re.M)]
+    
     # YMD
     pattern_YMD = fr"\b{year} {month} {date}\b"
     dates += [f"{date[0]}/{_get_num_month(date[1])}/{_get_correct_day(date[2])}"
               if len(date[2]) != 0 else f"{date[0]}/{_get_num_month(date[1])}"
               for date in re.findall(pattern_YMD, html, flags=re.M)]
+    
     # ISO (date can't be single digit)
     pattern_ISO = fr"\b{year}-((?:0[1-9])|(?:1[0-2]))-((?:0[1-9])|(?:[12][0-9])|(?:3[01]))\b"
     dates += [f"{date[0]}/{date[1]}/{date[2]}"
