@@ -2,6 +2,8 @@ import os
 import re
 import pandas as pd
 import altair as alt
+from flask import Flask, render_template
+import tempfile
 
 
 def plot_reported_cases(data,
@@ -25,12 +27,12 @@ def plot_reported_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_bar().encode(
+    chart = alt.Chart(data).mark_bar(color="#217272").encode(
         x="Dato",
         y="Nye tilfeller",
-        color="Fylke"
     ).properties(
-        title="Antall meldte covid-19 tilfeller etter prøvetakingsdato"
+        title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
+        width=600
     )
 
     return chart
@@ -57,17 +59,49 @@ def plot_cumulative_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_line().encode(
+    chart = alt.Chart(data).mark_line(color="#EF3E61").encode(
         x="Dato",
         y="Kumulativt antall",
-        color="Fylke"
     ).properties(
-        title="Antall meldte covid-19 tilfeller etter prøvetakingsdato"
+        title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
+        width=600
     )
 
     return chart
 
 
+def plot_both(data,
+              county="Alle fylker",
+              start="2020-02-21",
+              end="2020-11-08"):
+
+    data = data.loc[(data["Fylke"] == county) & (
+        data["Dato"] >= start) & (data["Dato"] <= end)]
+
+    base = alt.Chart(data).encode(
+        x="Dato"
+    ).properties(
+        title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
+        width=600
+    )
+
+    reported = base.mark_bar(color="#217272").encode(
+        y=alt.Y("Nye tilfeller",
+                axis=alt.Axis(titleColor="#217272"))
+    )
+
+    cumulative = base.mark_line(stroke="#EF3E61").encode(
+        y=alt.Y("Kumulativt antall",
+                axis=alt.Axis(titleColor="#EF3E61"))
+    )
+
+    chart = alt.layer(reported, cumulative).resolve_scale(
+        y="independent"
+    )
+
+    return chart
+
+    
 def _read_csv(directory):
     """Reads and combines all .csv files in given directory to one Dataframe.
 
@@ -102,10 +136,39 @@ def _read_csv(directory):
     return master_df
 
 
+app = Flask(__name__)
+data = _read_csv("./reported_cases")
+
+
+@app.route('/')
+def plot_html():
+    return render_template("plot.html")
+
+
+# json methods
+def get_json(fig):
+    tmp = tempfile.NamedTemporaryFile(suffix=".json")
+    fig.save(tmp.name)
+
+    with open(tmp.name) as file:
+        return file.read()
+
+
+@app.route('/plot_reported.json')
+def plot_reported_json():
+    fig = plot_reported_cases(data)
+    return get_json(fig)
+
+@app.route('/plot_cumulative.json')
+def plot_cumulative_json():
+    fig = plot_cumulative_cases(data)
+    return get_json(fig)
+
+@app.route('/plot_both.json')
+def plot_both_json():
+    fig = plot_both(data)
+    return get_json(fig)
+
+
 if __name__ == "__main__":
-
-    data = _read_csv("./reported_cases")
-
-    plot_reported_cases(data)
-
-    plot_cumulative_cases(data)
+    app.run(debug=True)

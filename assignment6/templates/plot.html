@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Covid-19 i Norge</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+
+<body>
+    <h1>Covid-19 tilfeller i Norge</h1>
+
+    <div id="vis1"></div>
+    <div id="vis2"></div>
+    <div id="vis3"></div>
+    <script>
+        (async function (vegaEmbed) {
+            var response_reported_cases = await fetch("plot_reported.json");
+            var response_cumulative_cases = await fetch("plot_cumulative.json");
+            var response_both = await fetch("plot_both.json");
+            
+            var spec_reported_cases = await response_reported_cases.json();
+            var spec_cumulative_cases = await response_cumulative_cases.json();
+            var spec_both = await response_both.json();
+            
+            var embedOpt = {
+                "mode": "vega-lite"
+            };
+
+            function showError(el, error) {
+                el.innerHTML = ('<div class="error" style="color:red;">'
+                    + '<p>JavaScript Error: ' + error.message + '</p>'
+                    + "<p>This usually means there's a typo in your chart specification. "
+                    + "See the javascript console for the full traceback.</p>"
+                    + '</div>');
+                throw error;
+            }
+            const el_reported_cases = document.getElementById('vis1');
+            vegaEmbed("#vis1", spec_reported_cases, embedOpt)
+                .catch(error => showError(el_reported_cases, error));
+            const el_cumulative_cases = document.getElementById('vis2');
+            vegaEmbed("#vis2", spec_cumulative_cases, embedOpt)
+                .catch(error => showError(el_cumulative_cases, error));
+            const el_both = document.getElementById('vis3');
+            vegaEmbed("#vis3", spec_both, embedOpt)
+                .catch(error => showError(el_both, error));
+        })(vegaEmbed);
+    </script>
+</body>
+
+</html>
