@@ -16,6 +16,19 @@
 <body>
     <h1>Covid-19 tilfeller i Norge</h1>
 
+    <form action="/" method="POST">
+        <label for="fylke">Velg et fylke:</label>
+        <select id="fylke" name="fylke" onchange="this.form.submit();">
+
+            {% for county in ["Alle fylker", "Agder", "Innlandet", "Møre og Romsdal", "Nordland", "Oslo", "Rogaland", "Troms og Finnmark", "Trøndelag", "Vestfold og Telemark", "Vestland", "Viken"] %}
+            <option value="{{ county }}" {% if selected_county==county %} selected {% endif %}>{{ county }}</option>
+            {% endfor %}
+
+        </select>
+    </form>
+    <br>
+    
+
     <div id="vis1"></div>
     <div id="vis2"></div>
     <div id="vis3"></div>

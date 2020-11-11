@@ -2,7 +2,7 @@ import os
 import re
 import pandas as pd
 import altair as alt
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import tempfile
 
 
@@ -30,10 +30,11 @@ def plot_reported_cases(data,
     chart = alt.Chart(data).mark_bar(color="#217272").encode(
         x="Dato",
         y="Nye tilfeller",
+        tooltip=["Dato", "Nye tilfeller"]
     ).properties(
         title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
         width=600
-    )
+    ).interactive(bind_y=False)
 
     return chart
 
@@ -62,10 +63,11 @@ def plot_cumulative_cases(data,
     chart = alt.Chart(data).mark_line(color="#EF3E61").encode(
         x="Dato",
         y="Kumulativt antall",
+        tooltip=["Dato", "Kumulativt antall"]
     ).properties(
         title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
         width=600
-    )
+    ).interactive(bind_y=False)
 
     return chart
 
@@ -74,7 +76,21 @@ def plot_both(data,
               county="Alle fylker",
               start="2020-02-21",
               end="2020-11-08"):
+    """Creates a plot displaying both bars for reported cases and a line for 
+        cumulative cases of Covic-19 in given county.
 
+    Args:
+        data (pandas.core.frame.DataFrame): The data to be plotted.
+        county (str, optional): The county to be plotted.
+            Defaults to "Alle fylker".
+        start (str, optional): The start date for the time range (inclusive).
+            Format: YYYY-MM-DD. Defaults to "2020-02-21".
+        end (str, optional): The end date for the time range (inclusive).
+            Format: YYYY-MM-DD. Defaults to "2020-11-08".
+
+    Returns:
+        altair.vegalite.v4.api.Chart: The plotted chart.
+    """
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
@@ -87,13 +103,20 @@ def plot_both(data,
 
     reported = base.mark_bar(color="#217272").encode(
         y=alt.Y("Nye tilfeller",
-                axis=alt.Axis(titleColor="#217272"))
-    )
+                axis=alt.Axis(titleColor="#217272")),
+        tooltip=["Dato", "Nye tilfeller"]
+    ).interactive(
+        bind_y=False
+        )
 
     cumulative = base.mark_line(stroke="#EF3E61").encode(
         y=alt.Y("Kumulativt antall",
-                axis=alt.Axis(titleColor="#EF3E61"))
-    )
+                axis=alt.Axis(titleColor="#EF3E61")),
+        tooltip=["Dato", "Kumulativt antall"]
+    ).interactive(
+        bind_y=False
+        )
+
 
     chart = alt.layer(reported, cumulative).resolve_scale(
         y="independent"
@@ -138,11 +161,19 @@ def _read_csv(directory):
 
 app = Flask(__name__)
 data = _read_csv("./reported_cases")
+county = "Alle fylker"
 
 
 @app.route('/')
-def plot_html():
-    return render_template("plot.html")
+def root():
+    return render_template("plot.html", selected_county=county)
+
+
+@app.route('/', methods=['POST'])
+def select_county():
+    global county 
+    county = request.form["fylke"]
+    return render_template("plot.html", selected_county=county)
 
 
 # json methods
@@ -156,17 +187,17 @@ def get_json(fig):
 
 @app.route('/plot_reported.json')
 def plot_reported_json():
-    fig = plot_reported_cases(data)
+    fig = plot_reported_cases(data, county)
     return get_json(fig)
 
 @app.route('/plot_cumulative.json')
 def plot_cumulative_json():
-    fig = plot_cumulative_cases(data)
+    fig = plot_cumulative_cases(data, county)
     return get_json(fig)
 
 @app.route('/plot_both.json')
 def plot_both_json():
-    fig = plot_both(data)
+    fig = plot_both(data, county)
     return get_json(fig)
 
 
