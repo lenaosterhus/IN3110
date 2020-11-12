@@ -27,12 +27,12 @@ def plot_reported_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_bar(color="#217272").encode(
+    chart = alt.Chart(data).mark_bar(color="darkblue").encode(
         x="Dato",
         y="Nye tilfeller",
         tooltip=["Dato", "Nye tilfeller"]
     ).properties(
-        title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
+        title=f"Antall meldte nye covid-19 tilfeller etter prøvetakingsdato for: {county}",
         width=600
     ).interactive(bind_y=False)
 
@@ -60,12 +60,12 @@ def plot_cumulative_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_line(color="#EF3E61").encode(
+    chart = alt.Chart(data).mark_line(color="red").encode(
         x="Dato",
         y="Kumulativt antall",
         tooltip=["Dato", "Kumulativt antall"]
     ).properties(
-        title=f"Antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
+        title=f"Kumulativt antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
         width=600
     ).interactive(bind_y=False)
 
@@ -101,17 +101,17 @@ def plot_both(data,
         width=600
     )
 
-    reported = base.mark_bar(color="#217272").encode(
+    reported = base.mark_bar(color="darkblue").encode(
         y=alt.Y("Nye tilfeller",
-                axis=alt.Axis(titleColor="#217272")),
+                axis=alt.Axis(titleColor="darkblue")),
         tooltip=["Dato", "Nye tilfeller"]
     ).interactive(
         bind_y=False
         )
 
-    cumulative = base.mark_line(stroke="#EF3E61").encode(
+    cumulative = base.mark_line(stroke="red").encode(
         y=alt.Y("Kumulativt antall",
-                axis=alt.Axis(titleColor="#EF3E61")),
+                axis=alt.Axis(titleColor="red")),
         tooltip=["Dato", "Kumulativt antall"]
     ).interactive(
         bind_y=False
@@ -162,6 +162,57 @@ def _read_csv(directory):
         master_df = master_df.append(county_data)
 
     return master_df
+
+
+def plot_norway():
+    """Creates a plot displaying the reported COVID-19 rate per 100000 
+        inhabitants by county in Norway.
+    
+    The data was last updated 11.11.2020.
+
+    Returns:
+        altair.vegalite.v4.api.Chart: The plotted chart.
+    """
+    data = pd.read_csv("antall-meldte-tilfeller.csv", sep=";")
+
+    # topojson of norways counties
+    counties = alt.topo_feature("https://raw.githubusercontent.com/deldersveld/topojson/master/countries/norway/norway-new-counties.json", 
+                                "Fylker")
+
+    # Used for highlighting
+    nearest = alt.selection(type="single", on="mouseover", 
+                            fields=["properties.navn"], empty="none")
+
+    fig = alt.Chart(counties).mark_geoshape().encode(
+        tooltip=[
+            alt.Tooltip("properties.navn:N", title="Fylke"),
+            alt.Tooltip("Insidens:Q", title="Tilfeller per 100 000"),
+        ],
+        color=alt.Color("Insidens:Q", scale=alt.Scale(scheme="reds"),
+                        legend=alt.Legend(title="Tilfeller per 100 000", 
+                                          direction="horizontal", 
+                                          orient="bottom",
+                                          gradientLength=375)),
+        stroke=alt.condition(nearest, alt.value("grey"), alt.value(None)),
+        opacity=alt.condition(nearest, alt.value(1), alt.value(0.8)),
+
+    # Map cases to counties
+    ).transform_lookup(
+        lookup="properties.navn",
+        from_=alt.LookupData(data, "Category", ["Insidens"])
+    ).properties(
+        width=375,
+        height=450,
+        title={"text": "Antall tilfeller per 100 000 innbyggere i hvert fylke",
+               "subtitle": "Oppdatert 11.11.2020",
+               "subtitleColor": "lightgray"}
+    ).add_selection(
+        nearest
+    ).configure_view(
+        strokeOpacity=0 #  Removes borders
+    )
+
+    return fig
 
 
 app = Flask(__name__)
@@ -225,6 +276,12 @@ def _plot_cumulative_json():
 @app.route('/plot_both.json')
 def _plot_both_json():
     fig = plot_both(data, county)
+    return _get_json(fig)
+
+
+@app.route('/plot_norway.json')
+def _plot_norway_json():
+    fig = plot_norway()
     return _get_json(fig)
 
 

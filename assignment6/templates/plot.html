@@ -7,6 +7,10 @@
         .error {
             color: red;
         }
+        .left {
+            float: left;
+            max-width: 800px;
+        }
     </style>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
@@ -14,33 +18,47 @@
 </head>
 
 <body>
+
     <h1>Covid-19 tilfeller i Norge</h1>
 
+    <a href="/help">Go to help page</a>
+    <br>
+    <br>
     <form action="/" method="POST">
         <label for="fylke">Velg et fylke:</label>
         <select id="fylke" name="fylke" onchange="this.form.submit();">
-
+    
             {% for county in ["Alle fylker", "Agder", "Innlandet", "Møre og Romsdal", "Nordland", "Oslo", "Rogaland", "Troms og Finnmark", "Trøndelag", "Vestfold og Telemark", "Vestland", "Viken"] %}
             <option value="{{ county }}" {% if selected_county==county %} selected {% endif %}>{{ county }}</option>
             {% endfor %}
-
+    
         </select>
     </form>
     <br>
-    
 
-    <div id="vis1"></div>
-    <div id="vis2"></div>
-    <div id="vis3"></div>
+    <div class="left">
+        <div id="vis1"></div>
+        <br>
+        <br>
+        <div id="vis2"></div>
+        <br>
+        <br>
+        <div id="vis3"></div>
+    </div>
+    
+    <div id="vis4" class="left"></div>
+
     <script>
         (async function (vegaEmbed) {
             var response_reported_cases = await fetch("plot_reported.json");
             var response_cumulative_cases = await fetch("plot_cumulative.json");
             var response_both = await fetch("plot_both.json");
+            var response_norway = await fetch("plot_norway.json");
             
             var spec_reported_cases = await response_reported_cases.json();
             var spec_cumulative_cases = await response_cumulative_cases.json();
             var spec_both = await response_both.json();
+            var spec_norway = await response_norway.json();
             
             var embedOpt = {
                 "mode": "vega-lite"
@@ -63,11 +81,11 @@
             const el_both = document.getElementById('vis3');
             vegaEmbed("#vis3", spec_both, embedOpt)
                 .catch(error => showError(el_both, error));
+            const el_norway = document.getElementById('vis4');
+            vegaEmbed("#vis4", spec_norway, embedOpt)
+                .catch(error => showError(el_norway, error));
         })(vegaEmbed);
     </script>
-    <br>
-    <br>
-    <a href="/help">Go to help page</a>
 </body>
 
 </html>
