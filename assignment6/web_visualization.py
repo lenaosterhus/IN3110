@@ -128,6 +128,11 @@ def plot_both(data,
 def _read_csv(directory):
     """Reads and combines all .csv files in given directory to one Dataframe.
 
+    The .csv files are named with the index of the corresponding county in the
+    counties list: ["Alle fylker", "Agder", "Innlandet", "Møre og Romsdal",
+                    "Nordland", "Oslo", "Rogaland", "Troms og Finnmark",
+                    "Trøndelag", "Vestfold og Telemark", "Vestland", "Viken"]
+
     Args:
         directory (str): The directory path.
 
@@ -166,18 +171,38 @@ county = "Alle fylker"
 
 @app.route('/')
 def root():
+    """Creates the root page.
+
+    Returns:
+        str: The HTML from template 'plot.html'.
+    """
     return render_template("plot.html", selected_county=county)
 
 
 @app.route('/', methods=['POST'])
 def select_county():
+    """Updates the root page with selected county.
+
+    Returns:
+        str: The HTML from template 'plot.html' with selected county.
+    """
     global county 
     county = request.form["fylke"]
     return render_template("plot.html", selected_county=county)
 
 
-# json methods
-def get_json(fig):
+@app.route('/help')
+def display_help():
+    """Creates the help page.
+
+    Returns:
+        str: The HTML from template 'web_visualization.html'.
+    """
+    return render_template("web_visualization.html")
+
+
+# -------------- Methods for creating JSON figures --------------
+def _get_json(fig):
     tmp = tempfile.NamedTemporaryFile(suffix=".json")
     fig.save(tmp.name)
 
@@ -186,19 +211,21 @@ def get_json(fig):
 
 
 @app.route('/plot_reported.json')
-def plot_reported_json():
+def _plot_reported_json():
     fig = plot_reported_cases(data, county)
-    return get_json(fig)
+    return _get_json(fig)
+
 
 @app.route('/plot_cumulative.json')
-def plot_cumulative_json():
+def _plot_cumulative_json():
     fig = plot_cumulative_cases(data, county)
-    return get_json(fig)
+    return _get_json(fig)
+
 
 @app.route('/plot_both.json')
-def plot_both_json():
+def _plot_both_json():
     fig = plot_both(data, county)
-    return get_json(fig)
+    return _get_json(fig)
 
 
 if __name__ == "__main__":
