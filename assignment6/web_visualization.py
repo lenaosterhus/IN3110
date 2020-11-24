@@ -5,11 +5,15 @@ import altair as alt
 from flask import Flask, render_template, request
 import tempfile
 
+# Colors for plots
+color_reported = "#088da5"
+color_cumulative = "#a52008"
+
 
 def plot_reported_cases(data,
                         county="Alle fylker",
                         start="2020-02-21",
-                        end="2020-11-08"):
+                        end="2020-11-23"):
     """Creates a bar chart of all reported cases of Covic-19 in given county.
 
     Args:
@@ -19,7 +23,7 @@ def plot_reported_cases(data,
         start (str, optional): The start date for the time range (inclusive).
             Format: YYYY-MM-DD. Defaults to "2020-02-21".
         end (str, optional): The end date for the time range (inclusive).
-            Format: YYYY-MM-DD. Defaults to "2020-11-08".
+            Format: YYYY-MM-DD. Defaults to "2020-11-23".
 
     Returns:
         altair.vegalite.v4.api.Chart: The plotted bar chart.
@@ -27,7 +31,7 @@ def plot_reported_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_bar(color="darkblue").encode(
+    chart = alt.Chart(data).mark_bar(color=color_reported, size=2).encode(
         x="Dato",
         y="Nye tilfeller",
         tooltip=["Dato", "Nye tilfeller"]
@@ -42,7 +46,7 @@ def plot_reported_cases(data,
 def plot_cumulative_cases(data,
                           county="Alle fylker",
                           start="2020-02-21",
-                          end="2020-11-08"):
+                          end="2020-11-23"):
     """Creates a line chart of cumulative cases of Covic-19 in given county.
 
     Args:
@@ -52,7 +56,7 @@ def plot_cumulative_cases(data,
         start (str, optional): The start date for the time range (inclusive).
             Format: YYYY-MM-DD. Defaults to "2020-02-21".
         end (str, optional): The end date for the time range (inclusive).
-            Format: YYYY-MM-DD. Defaults to "2020-11-08".
+            Format: YYYY-MM-DD. Defaults to "2020-11-23".
 
     Returns:
         altair.vegalite.v4.api.Chart: The plotted line chart.
@@ -60,10 +64,30 @@ def plot_cumulative_cases(data,
     data = data.loc[(data["Fylke"] == county) & (
         data["Dato"] >= start) & (data["Dato"] <= end)]
 
-    chart = alt.Chart(data).mark_line(color="red").encode(
+    # Create a selection that chooses the nearest point & selects based on date
+    nearest = alt.selection(type="single", nearest=True,
+                            on="mouseover", fields=["Dato"], empty="none")
+
+    line = alt.Chart(data).mark_line(color=color_cumulative).encode(
         x="Dato",
-        y="Kumulativt antall",
-        tooltip=["Dato", "Kumulativt antall"]
+        y="Kumulativt antall:Q",
+    )
+
+    # Draws a circle on the line and displays information (tooltip)
+    points = alt.Chart(data).mark_circle(
+        color=color_cumulative, 
+        size=50
+    ).encode(
+        x="Dato",
+        y="Kumulativt antall:Q",
+        opacity=alt.condition(nearest, alt.value(1), alt.value(0)),
+        tooltip=["Dato", "Kumulativt antall:Q"]
+    ).add_selection(
+        nearest
+    )
+
+    chart = alt.layer(
+        line, points
     ).properties(
         title=f"Kumulativt antall meldte covid-19 tilfeller etter prøvetakingsdato for: {county}",
         width=600
@@ -75,7 +99,7 @@ def plot_cumulative_cases(data,
 def plot_both(data,
               county="Alle fylker",
               start="2020-02-21",
-              end="2020-11-08"):
+              end="2020-11-23"):
     """Creates a plot displaying both bars for reported cases and a line for 
         cumulative cases of Covic-19 in given county.
 
@@ -86,7 +110,7 @@ def plot_both(data,
         start (str, optional): The start date for the time range (inclusive).
             Format: YYYY-MM-DD. Defaults to "2020-02-21".
         end (str, optional): The end date for the time range (inclusive).
-            Format: YYYY-MM-DD. Defaults to "2020-11-08".
+            Format: YYYY-MM-DD. Defaults to "2020-11-23".
 
     Returns:
         altair.vegalite.v4.api.Chart: The plotted chart.
@@ -101,22 +125,21 @@ def plot_both(data,
         width=600
     )
 
-    reported = base.mark_bar(color="darkblue").encode(
+    reported = base.mark_bar(color=color_reported, size=2).encode(
         y=alt.Y("Nye tilfeller",
-                axis=alt.Axis(titleColor="darkblue")),
+                axis=alt.Axis(titleColor=color_reported)),
         tooltip=["Dato", "Nye tilfeller"]
     ).interactive(
         bind_y=False
-        )
+    )
 
-    cumulative = base.mark_line(stroke="red").encode(
+    cumulative = base.mark_line(stroke=color_cumulative).encode(
         y=alt.Y("Kumulativt antall",
-                axis=alt.Axis(titleColor="red")),
+                axis=alt.Axis(titleColor=color_cumulative)),
         tooltip=["Dato", "Kumulativt antall"]
     ).interactive(
         bind_y=False
-        )
-
+    )
 
     chart = alt.layer(reported, cumulative).resolve_scale(
         y="independent"
