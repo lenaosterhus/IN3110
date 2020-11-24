@@ -21,21 +21,28 @@
 
     <h1>Covid-19 tilfeller i Norge</h1>
 
-    <a href="/help">Go to help page</a>
+    <a href="/help">Se dokumentasjon</a>
+
     <br>
     <br>
-    <form action="/" method="POST">
+    <!-- call submitForm() function on submit (button) -->
+    <form onsubmit="return submitForm();" id="form">
+
         <label for="fylke">Velg et fylke:</label>
-        <select id="fylke" name="fylke" onchange="this.form.submit();">
+        <!-- Drop down menu of all counties -->
+        <select id="fylke" name="fylke">
     
             {% for county in ["Alle fylker", "Agder", "Innlandet", "Møre og Romsdal", "Nordland", "Oslo", "Rogaland", "Troms og Finnmark", "Trøndelag", "Vestfold og Telemark", "Vestland", "Viken"] %}
             <option value="{{ county }}" {% if selected_county==county %} selected {% endif %}>{{ county }}</option>
             {% endfor %}
     
         </select>
+
+        <input type="submit" value="Oppdater" />
     </form>
     <br>
 
+    <!-- Align the first three plots to the left -->
     <div class="left">
         <div id="vis1"></div>
         <br>
@@ -46,19 +53,48 @@
         <div id="vis3"></div>
     </div>
     
+    <!-- Align the last plot next to the others if possible -->
     <div id="vis4" class="left"></div>
 
     <script>
-        (async function (vegaEmbed) {
-            var response_reported_cases = await fetch("plot_reported.json");
-            var response_cumulative_cases = await fetch("plot_cumulative.json");
-            var response_both = await fetch("plot_both.json");
-            var response_norway = await fetch("plot_norway.json");
+        function submitForm() {
+            // Call plot function when the form is submitted
+            plot();
+            // Return false to prevent reloading of page on submit
+            return false;
+        }
+        async function plot() {
+            // Plots the reported and cumulative cases of COVID-19
+
+            var county = document.getElementById("fylke").selectedOptions[0].value;
+
+            // Submit POST requests with the county chosen as JSON body
+            var response_reported_cases = await fetch("plot_reported.json", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(county)
+            });
+            var response_cumulative_cases = await fetch("plot_cumulative.json", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(county)
+            });
+            var response_both = await fetch("plot_both.json", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(county)
+            });
             
+            // Resposnse is the vega spec JSON
             var spec_reported_cases = await response_reported_cases.json();
             var spec_cumulative_cases = await response_cumulative_cases.json();
             var spec_both = await response_both.json();
-            var spec_norway = await response_norway.json();
             
             var embedOpt = {
                 "mode": "vega-lite"
@@ -81,10 +117,33 @@
             const el_both = document.getElementById('vis3');
             vegaEmbed("#vis3", spec_both, embedOpt)
                 .catch(error => showError(el_both, error));
+        }
+
+        async function plot_map() {
+            // Plots a map of Norway with cases per 100k capita
+            var response_norway = await fetch("plot_norway.json");
+            var spec_norway = await response_norway.json();
+
+            var embedOpt = {
+                "mode": "vega-lite"
+            };
+            
+            function showError(el, error) {
+                el.innerHTML = ('<div class="error" style="color:red;">'
+                    + '<p>JavaScript Error: ' + error.message + '</p>'
+                    + "<p>This usually means there's a typo in your chart specification. "
+                    + "See the javascript console for the full traceback.</p>"
+                    + '</div>');
+                throw error;
+            }
+
             const el_norway = document.getElementById('vis4');
             vegaEmbed("#vis4", spec_norway, embedOpt)
                 .catch(error => showError(el_norway, error));
-        })(vegaEmbed);
+        }
+        // Invoke on page load
+        plot();
+        plot_map();
     </script>
 </body>
 

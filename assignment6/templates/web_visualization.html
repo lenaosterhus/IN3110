@@ -18,10 +18,10 @@
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="altair.html">altair</a><br>
-<a href="os.html">os</a><br>
-</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
-<a href="re.html">re</a><br>
-</td><td width="25%" valign=top><a href="tempfile.html">tempfile</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
 </td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -33,7 +33,7 @@
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;HTML&nbsp;from&nbsp;template&nbsp;'web_visualization.html'.</tt></dd></dl>
- <dl><dt><a name="-plot_both"><strong>plot_both</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-08')</dt><dd><tt>Creates&nbsp;a&nbsp;plot&nbsp;displaying&nbsp;both&nbsp;bars&nbsp;for&nbsp;reported&nbsp;cases&nbsp;and&nbsp;a&nbsp;line&nbsp;for&nbsp;<br>
+ <dl><dt><a name="-plot_both"><strong>plot_both</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-23')</dt><dd><tt>Creates&nbsp;a&nbsp;plot&nbsp;displaying&nbsp;both&nbsp;bars&nbsp;for&nbsp;reported&nbsp;cases&nbsp;and&nbsp;a&nbsp;line&nbsp;for&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cumulative&nbsp;cases&nbsp;of&nbsp;Covic-19&nbsp;in&nbsp;given&nbsp;county.<br>
 &nbsp;<br>
 Args:<br>
@@ -43,11 +43,15 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;start&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-02-21".<br>
 &nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;end&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-08".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-23".<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;altair.vegalite.v4.api.Chart:&nbsp;The&nbsp;plotted&nbsp;chart.</tt></dd></dl>
- <dl><dt><a name="-plot_cumulative_cases"><strong>plot_cumulative_cases</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-08')</dt><dd><tt>Creates&nbsp;a&nbsp;line&nbsp;chart&nbsp;of&nbsp;cumulative&nbsp;cases&nbsp;of&nbsp;Covic-19&nbsp;in&nbsp;given&nbsp;county.<br>
+ <dl><dt><a name="-plot_both_json"><strong>plot_both_json</strong></a>()</dt><dd><tt>POST&nbsp;requests&nbsp;to&nbsp;/plot_both.json<br>
+The&nbsp;body&nbsp;of&nbsp;the&nbsp;request&nbsp;should&nbsp;be&nbsp;JSON&nbsp;with&nbsp;key:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fylke:&nbsp;name&nbsp;of&nbsp;the&nbsp;county&nbsp;to&nbsp;plot<br>
+The&nbsp;response&nbsp;will&nbsp;be&nbsp;the&nbsp;vega&nbsp;chart&nbsp;spec&nbsp;as&nbsp;JSON</tt></dd></dl>
+ <dl><dt><a name="-plot_cumulative_cases"><strong>plot_cumulative_cases</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-23')</dt><dd><tt>Creates&nbsp;a&nbsp;line&nbsp;chart&nbsp;of&nbsp;cumulative&nbsp;cases&nbsp;of&nbsp;Covic-19&nbsp;in&nbsp;given&nbsp;county.<br>
 &nbsp;<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;(pandas.core.frame.DataFrame):&nbsp;The&nbsp;data&nbsp;to&nbsp;be&nbsp;plotted.<br>
@@ -56,10 +60,14 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;start&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-02-21".<br>
 &nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;end&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-08".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-23".<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;altair.vegalite.v4.api.Chart:&nbsp;The&nbsp;plotted&nbsp;line&nbsp;chart.</tt></dd></dl>
+ <dl><dt><a name="-plot_cumulative_json"><strong>plot_cumulative_json</strong></a>()</dt><dd><tt>POST&nbsp;requests&nbsp;to&nbsp;/plot_cumulative.json<br>
+The&nbsp;body&nbsp;of&nbsp;the&nbsp;request&nbsp;should&nbsp;be&nbsp;JSON&nbsp;with&nbsp;key:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fylke:&nbsp;name&nbsp;of&nbsp;the&nbsp;county&nbsp;to&nbsp;plot<br>
+The&nbsp;response&nbsp;will&nbsp;be&nbsp;the&nbsp;vega&nbsp;chart&nbsp;spec&nbsp;as&nbsp;JSON</tt></dd></dl>
  <dl><dt><a name="-plot_norway"><strong>plot_norway</strong></a>()</dt><dd><tt>Creates&nbsp;a&nbsp;plot&nbsp;displaying&nbsp;the&nbsp;reported&nbsp;COVID-19&nbsp;rate&nbsp;per&nbsp;100000&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;inhabitants&nbsp;by&nbsp;county&nbsp;in&nbsp;Norway.<br>
 &nbsp;<br>
@@ -67,7 +75,10 @@ The&nbsp;data&nbsp;was&nbsp;last&nbsp;updated&nbsp;11.11.2020.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;altair.vegalite.v4.api.Chart:&nbsp;The&nbsp;plotted&nbsp;chart.</tt></dd></dl>
- <dl><dt><a name="-plot_reported_cases"><strong>plot_reported_cases</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-08')</dt><dd><tt>Creates&nbsp;a&nbsp;bar&nbsp;chart&nbsp;of&nbsp;all&nbsp;reported&nbsp;cases&nbsp;of&nbsp;Covic-19&nbsp;in&nbsp;given&nbsp;county.<br>
+ <dl><dt><a name="-plot_norway_json"><strong>plot_norway_json</strong></a>()</dt><dd><tt>Plots&nbsp;a&nbsp;map&nbsp;of&nbsp;Norway&nbsp;displaying&nbsp;the&nbsp;reported&nbsp;COVID-19&nbsp;rate&nbsp;per&nbsp;100000&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;inhabitants&nbsp;by&nbsp;county.<br>
+The&nbsp;response&nbsp;is&nbsp;the&nbsp;vega&nbsp;chart&nbsp;spec&nbsp;as&nbsp;JSON</tt></dd></dl>
+ <dl><dt><a name="-plot_reported_cases"><strong>plot_reported_cases</strong></a>(data, county='Alle fylker', start='2020-02-21', end='2020-11-23')</dt><dd><tt>Creates&nbsp;a&nbsp;bar&nbsp;chart&nbsp;of&nbsp;all&nbsp;reported&nbsp;cases&nbsp;of&nbsp;Covic-19&nbsp;in&nbsp;given&nbsp;county.<br>
 &nbsp;<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;(pandas.core.frame.DataFrame):&nbsp;The&nbsp;data&nbsp;to&nbsp;be&nbsp;plotted.<br>
@@ -76,18 +87,18 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;start&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-02-21".<br>
 &nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;(str,&nbsp;optional):&nbsp;The&nbsp;end&nbsp;date&nbsp;for&nbsp;the&nbsp;time&nbsp;range&nbsp;(inclusive).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-08".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Format:&nbsp;YYYY-MM-DD.&nbsp;Defaults&nbsp;to&nbsp;"2020-11-23".<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;altair.vegalite.v4.api.Chart:&nbsp;The&nbsp;plotted&nbsp;bar&nbsp;chart.</tt></dd></dl>
+ <dl><dt><a name="-plot_reported_json"><strong>plot_reported_json</strong></a>()</dt><dd><tt>POST&nbsp;requests&nbsp;to&nbsp;/plot_reported.json<br>
+The&nbsp;body&nbsp;of&nbsp;the&nbsp;request&nbsp;should&nbsp;be&nbsp;JSON&nbsp;with&nbsp;key:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fylke:&nbsp;name&nbsp;of&nbsp;the&nbsp;county&nbsp;to&nbsp;plot<br>
+The&nbsp;response&nbsp;will&nbsp;be&nbsp;the&nbsp;vega&nbsp;chart&nbsp;spec&nbsp;as&nbsp;JSON</tt></dd></dl>
  <dl><dt><a name="-root"><strong>root</strong></a>()</dt><dd><tt>Creates&nbsp;the&nbsp;root&nbsp;page.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;HTML&nbsp;from&nbsp;template&nbsp;'plot.html'.</tt></dd></dl>
- <dl><dt><a name="-select_county"><strong>select_county</strong></a>()</dt><dd><tt>Updates&nbsp;the&nbsp;root&nbsp;page&nbsp;with&nbsp;selected&nbsp;county.<br>
-&nbsp;<br>
-Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;HTML&nbsp;from&nbsp;template&nbsp;'plot.html'&nbsp;with&nbsp;selected&nbsp;county.</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -96,9 +107,10 @@ Returns:<br>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>app</strong> = &lt;Flask 'web_visualization'&gt;<br>
-<strong>county</strong> = 'Alle fylker'<br>
-<strong>data</strong> =           Dato  Kumulativt antall  Nye tilfeller... 2  Vestfold og Telemark
+<strong>color_cumulative</strong> = '#a52008'<br>
+<strong>color_reported</strong> = '#088da5'<br>
+<strong>data</strong> =           Dato  Kumulativt antall  Nye tilfeller... 5  Vestfold og Telemark
 
-[3144 rows x 4 columns]<br>
+[3312 rows x 4 columns]<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>
 </body></html>

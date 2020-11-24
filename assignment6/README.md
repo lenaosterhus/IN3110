@@ -16,7 +16,7 @@ pip install <package>
 
 `Flask (1.1.2)` is used to build a web application.
 
-The built-in python packages `re`, `os`, `tempfile` are also used.
+The built-in python packages `re`, `os`, `json` are also used.
 
 ## Run script
 To build a web app with plots visualizing the corona dataset made publicly available by FHI, run the `web_visualization` script.

@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import altair as alt
 from flask import Flask, render_template, request
-import tempfile
+import json
 
 # Colors for plots
 color_reported = "#088da5"
@@ -240,7 +240,6 @@ def plot_norway():
 
 app = Flask(__name__)
 data = _read_csv("./reported_cases")
-county = "Alle fylker"
 
 
 @app.route('/')
@@ -250,19 +249,7 @@ def root():
     Returns:
         str: The HTML from template 'plot.html'.
     """
-    return render_template("plot.html", selected_county=county)
-
-
-@app.route('/', methods=['POST'])
-def select_county():
-    """Updates the root page with selected county.
-
-    Returns:
-        str: The HTML from template 'plot.html' with selected county.
-    """
-    global county 
-    county = request.form["fylke"]
-    return render_template("plot.html", selected_county=county)
+    return render_template("plot.html")
 
 
 @app.route('/help')
@@ -275,38 +262,43 @@ def display_help():
     return render_template("web_visualization.html")
 
 
-# -------------- Methods for creating JSON figures --------------
-def _get_json(fig):
-    tmp = tempfile.NamedTemporaryFile(suffix=".json")
-    fig.save(tmp.name)
-
-    with open(tmp.name) as file:
-        return file.read()
-
-
-@app.route('/plot_reported.json')
-def _plot_reported_json():
-    fig = plot_reported_cases(data, county)
-    return _get_json(fig)
+@app.route('/plot_reported.json', methods=["POST"])
+def plot_reported_json():
+    """POST requests to /plot_reported.json
+	The body of the request should be JSON with the name of the county chosen.
+	The response will be the vega chart spec as JSON
+	"""
+    fig = plot_reported_cases(data, county=request.json)
+    return json.dumps(fig.to_dict()), 200, {"Content-Type": "application/json"}
 
 
-@app.route('/plot_cumulative.json')
-def _plot_cumulative_json():
-    fig = plot_cumulative_cases(data, county)
-    return _get_json(fig)
+@app.route('/plot_cumulative.json', methods=["POST"])
+def plot_cumulative_json():
+    """POST requests to /plot_cumulative.json
+	The body of the request should be JSON with the name of the county chosen.
+	The response will be the vega chart spec as JSON
+	"""
+    fig = plot_cumulative_cases(data, county=request.json)
+    return json.dumps(fig.to_dict()), 200, {"Content-Type": "application/json"}
 
 
-@app.route('/plot_both.json')
-def _plot_both_json():
-    fig = plot_both(data, county)
-    return _get_json(fig)
+@app.route('/plot_both.json', methods=["POST"])
+def plot_both_json():
+    """POST requests to /plot_both.json
+	The body of the request should be JSON with the name of the county chosen.
+	The response will be the vega chart spec as JSON
+	"""
+    fig = plot_both(data, county=request.json)
+    return json.dumps(fig.to_dict()), 200, {"Content-Type": "application/json"}
 
 
 @app.route('/plot_norway.json')
-def _plot_norway_json():
-    fig = plot_norway()
-    return _get_json(fig)
+def plot_norway_json():
+    """	Plots a map of Norway displaying the reported COVID-19 rate per 100000 
+        inhabitants by county.
+    The response is the vega chart spec as JSON """
+    return json.dumps(plot_norway().to_dict()), 200, {"Content-Type": "application/json"}
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
