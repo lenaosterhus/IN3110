@@ -3,7 +3,6 @@ from instapy import filters
 from cv2 import cv2
 import numpy as np
 import pytest
-import os
 import importlib
 
 
